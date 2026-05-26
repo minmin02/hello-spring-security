@@ -9,7 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -19,8 +18,11 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     @Transactional(readOnly = true)
-    public Page<Product> findAll(Pageable pageable) {
-        return productRepository.findAll(pageable);
+    public Page<Product> findAll(String keyword, Pageable pageable) {
+        if (keyword == null || keyword.isBlank()) {
+            return productRepository.findAll(pageable);
+        }
+        return productRepository.findByNameContaining(keyword.trim(), pageable);
     }
 
     @Transactional(readOnly = true)

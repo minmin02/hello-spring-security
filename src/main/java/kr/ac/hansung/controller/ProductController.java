@@ -9,7 +9,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/products")
@@ -19,10 +24,16 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public String list(@PageableDefault(size = 5) Pageable pageable, Model model) {
-        Page<Product> productPage = productService.findAll(pageable);
+    public String list(
+        @RequestParam(required = false) String keyword,
+        @PageableDefault(size = 5) Pageable pageable,
+        Model model
+    ) {
+        String normalizedKeyword = (keyword == null || keyword.isBlank()) ? null : keyword.trim();
+        Page<Product> productPage = productService.findAll(normalizedKeyword, pageable);
+
         model.addAttribute("productPage", productPage);
-        model.addAttribute("products", productPage.getContent());
+        model.addAttribute("keyword", normalizedKeyword);
         return "products/list";
     }
 

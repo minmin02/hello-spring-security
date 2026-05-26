@@ -80,7 +80,13 @@
         </div>
     </div>
 </div>
+<div class="text-center text-muted small mb-3">
+    학번: 2171263&nbsp;&nbsp;|&nbsp;&nbsp;
+    성명: 김민규&nbsp;&nbsp;|&nbsp;&nbsp;
+    <span th:text="${'실습 수행: ' + #temporals.format(#temporals.createNow(), 'yyyy-MM-dd HH:mm:ss')}"></span>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
